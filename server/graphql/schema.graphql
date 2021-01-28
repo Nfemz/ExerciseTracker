@@ -1,3 +1,39 @@
 type Query {
-  greeting: String
+  Exercises: [Exercise]
+  Exercise(id: ID!): Exercise
+  Workouts: [Workout]
+  Workout(id: ID!): Workout
+}
+
+type Mutation {
+  createWorkout(input: WorkoutInput!): Workout
+  createExercise(input: ExerciseInput!): Exercise
+}
+
+type Workout {
+  id: ID!
+  name: String
+  exercises: [Exercise]
+}
+
+type Exercise {
+  id: ID!
+  name: String
+  description: String
+}
+
+input WorkoutInput {
+  name: String
+  exercises: [ExerciseInputWithID]
+}
+
+input ExerciseInput {
+  name: String
+  description: String
+}
+
+input ExerciseInputWithID {
+  id: ID!
+  name: String
+  description: String
 }

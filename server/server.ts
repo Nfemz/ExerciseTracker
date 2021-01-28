@@ -49,7 +49,7 @@ app.post("/login", async (req: RequestWithMiddleware, res: Response) => {
   } else {
     res
       .status(401)
-      .json({ message: "This username and password combination is incorrect" });
+      .json({ message: "Email and Password combination incorrect" });
   }
 });
 
@@ -62,10 +62,8 @@ app.post("/register", async (req: RequestWithMiddleware, res: Response) => {
     },
   });
 
-  console.warn(existingUser);
-
   if (existingUser) {
-    res.status(409).json({ message: "This user already exists" });
+    res.status(409).json({ message: "This email address is already in use" });
   }
 
   const user = await DBmodels.User.create({
@@ -75,7 +73,7 @@ app.post("/register", async (req: RequestWithMiddleware, res: Response) => {
   });
 
   res.status(201);
-  res.json(user);
+  res.json({ message: `Account for ${email} created successfully` });
 });
 
 UsersDB.sync().then(async () => {
