@@ -9,12 +9,31 @@ import {
   TextInput,
   Button,
 } from 'react-native';
+import {createStore, applyMiddleware} from 'redux';
+import {Provider, connect} from 'react-redux';
+import logger from 'redux-logger';
 
 import {loginUser, registerUser} from './requests';
-
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {reducer} from './redux/reducers';
+import {UserInfo} from './types/user.types';
+import {setUser} from './redux/actions';
+
+const reduxStore = createStore(reducer, applyMiddleware(logger));
 
 const App = () => {
+  return (
+    <Provider store={reduxStore}>
+      <ConnectedLogin />
+    </Provider>
+  );
+};
+
+const mapDispatchToProps = (dispatch: any) => ({
+  setUser: (userInfo: UserInfo) => dispatch(setUser(userInfo)),
+});
+
+const Login = () => {
   const [email, setEmail] = useState('Email');
   const [password, setPassword] = useState('Password');
   return (
@@ -89,5 +108,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
+
+const ConnectedLogin = connect(null, mapDispatchToProps)(Login);
 
 export default App;
